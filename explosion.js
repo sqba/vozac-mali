@@ -7,6 +7,7 @@ var b2FixtureDef = Box2D.Dynamics.b2FixtureDef;
 
 var particle_radius = 0.1;//0.1;
 
+
 function explode(x, y)
 {
     var fixDef = new b2FixtureDef;
@@ -31,6 +32,8 @@ function explode(x, y)
         body.h = 1.0;
         explosionParticles.push(body);
     }
+    var snd_explosion = new Audio("audio/explosion-02.wav"); // buffers automatically when created
+    snd_explosion.play();
 }
 
 

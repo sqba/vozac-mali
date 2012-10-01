@@ -71,6 +71,7 @@ function update()
     myWorld.Step(1/30, 8);
 
     update_car();
+    update_explosions();
 
     world.DrawDebugData();
 

@@ -1,7 +1,9 @@
 
 1. explosions - OK (could be done with one arc, debris needs to be removed)
 2. car
-3. networking
+3. audio (http://www.autospeak.com/library.htm)
+4. networking
+
 
 mines
 machine gun

@@ -23,6 +23,11 @@ var leftJoint;
 var rightJoint;
 
 
+var snd_engine_start = new Audio("audio/engine.wav"); // buffers automatically when created
+var snd_engine_gas = new Audio("audio/burnout.wav"); // buffers automatically when created
+snd_engine_start.play();
+
+
 //////////////////////////////////////////////////////
 var KEY_LEFT    = 37;
 var KEY_UP      = 38;
@@ -44,6 +49,7 @@ $(document).keydown(function onKeyDown(e)
 		    steeringAngle = MAX_STEER_ANGLE;
 		    break;
         case KEY_DOWN:
+            snd_engine_gas.play();
 		    engineSpeed = HORSEPOWERS;
 		    break;
     }
@@ -59,11 +65,11 @@ $(document).keyup(function keyReleased_handler(e){
         case KEY_UP:
         case KEY_DOWN:
     		engineSpeed = 0;
+            snd_engine_gas.pause();
 		    break;
     }
 });
 //////////////////////////////////////////////////////
-
 
 
 
@@ -189,6 +195,9 @@ function update_car()
 	leftJoint.SetMotorSpeed(mspeedl * STEER_SPEED);
 	var mspeedr = steeringAngle - rightJoint.GetJointAngle();
 	rightJoint.SetMotorSpeed(mspeedr * STEER_SPEED);
+
+    if(engineSpeed != 0)
+        snd_engine_gas.play();
 
 //    console.log("mspeedl: "+mspeedl);
 //    console.log("mspeedr: "+mspeedr);

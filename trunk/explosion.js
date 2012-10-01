@@ -5,7 +5,7 @@ var b2BodyDef = Box2D.Dynamics.b2BodyDef;
 var b2Body = Box2D.Dynamics.b2Body;
 var b2FixtureDef = Box2D.Dynamics.b2FixtureDef;
 
-var particle_radius = 0.2;//0.1;
+var particle_radius = 0.1;//0.1;
 
 function explode(x, y)
 {
@@ -14,7 +14,7 @@ function explode(x, y)
     fixDef.friction = 0.0;
     fixDef.restitution = 0.0;
 
-    for(var i = 0; i < 10; i++)
+    for(var i = 0; i < 40; i++)
     {
         var a = Math.PI/5*i;
         var vx = Math.cos(a);

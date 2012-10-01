@@ -1,5 +1,6 @@
 var EXPLOSION_SPEED = 500; //500;
-var explosionParticles = [];
+var explosions = [];
+var explosion_decays = [];
 
 var b2BodyDef = Box2D.Dynamics.b2BodyDef;
 var b2Body = Box2D.Dynamics.b2Body;
@@ -10,6 +11,7 @@ var particle_radius = 0.1;//0.1;
 
 function explode(x, y)
 {
+    var explosionParticles = [];
     var fixDef = new b2FixtureDef;
     fixDef.density = 50;
     fixDef.friction = 0.0;
@@ -32,6 +34,8 @@ function explode(x, y)
         body.h = 1.0;
         explosionParticles.push(body);
     }
+    explosions.push(explosionParticles);
+    explosion_decays.push(0);
     var snd_explosion = new Audio("audio/explosion-02.wav"); // buffers automatically when created
     snd_explosion.play();
 }
@@ -40,19 +44,46 @@ function explode(x, y)
 function DrawExplosion(ctx)
 {
     ctx.fillStyle = 'red';
-    for(var i = 0; i < explosionParticles.length; i++)
+    for(var e = 0; e < explosions.length; e++)
     {
-        var body = explosionParticles[i];
-        var t = body.m_xf;
-        ctx.translate(t.position.x, t.position.y)
-        ctx.beginPath();
-        ctx.arc(0, 0, particle_radius, 0, Math.PI*2, true);
-        ctx.closePath();
-        ctx.fill();
-        ctx.translate(-t.position.x, -t.position.y)
+        var explosionParticles = explosions[e];
+        if(explosion_decays[e] < 100)
+        {
+            for(var i = 0; i < explosionParticles.length; i++)
+            {
+                var body = explosionParticles[i];
+                var t = body.m_xf;
+                ctx.translate(t.position.x, t.position.y)
+                ctx.beginPath();
+                ctx.arc(0, 0, particle_radius, 0, Math.PI*2, true);
+                ctx.closePath();
+                ctx.fill();
+                ctx.translate(-t.position.x, -t.position.y)
+            }
+            explosion_decays[e]++;
+        }
     }
 }
 
+function update_explosions()
+{
+    for(var e = 0; e < explosions.length; e++)
+    {
+        var explosionParticles = explosions[e];
+        if(explosion_decays[e] < 10)
+        {
+            explosion_decays[e]++;
+        }
+        else
+        {
+            for(var i = 0; i < explosionParticles.length; i++)
+            {
+                var body = explosionParticles[i];
+                world.DestroyBody(body);
+            }
+         }
+    }
+}
 
 $(canvas).click(function (e)
 {

@@ -20,13 +20,13 @@ var rightFrontWheelPosition = new b2Vec2(1.4,-1.9);
 
 function Car()
 {
-    this.chassis;
-    this.leftWheel;
-    this.rightWheel;
-    this.leftRearWheel;
-    this.rightRearWheel;
-    this.leftJoint;
-    this.rightJoint;
+    this.chassis = null;
+    this.leftWheel = null;
+    this.rightWheel = null;
+    this.leftRearWheel = null;
+    this.rightRearWheel = null;
+    this.leftJoint = null;
+    this.rightJoint = null;
 
     this.engineSpeed = 0;
     this.steeringAngle = 0;

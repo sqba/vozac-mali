@@ -8,3 +8,5 @@
 mines
 machine gun
 guided missiles
+
+google earth?

@@ -1,3 +1,6 @@
+
+//////////////////////////////////////////////////////
+// Constants
 var EXPLOSION_SPEED = 700/ppm; //500;
 var explosions = [];
 var explosion_decays = [];
@@ -8,11 +11,22 @@ var b2Body = Box2D.Dynamics.b2Body;
 var b2FixtureDef = Box2D.Dynamics.b2FixtureDef;
 
 var particle_radius = 0.1;//0.1;
+//////////////////////////////////////////////////////
 
 
-function explode(x, y)
+//////////////////////////////////////////////////////
+function Explosion()
 {
-    var explosionParticles = [];
+    this.explosionParticles = [];
+    this.decay_counter = 0;
+}
+
+//////////////////////////////////////////////////////
+Explosion.prototype.Explode = function(x, y)
+{
+    var snd_explosion = new Audio("audio/explosion-02.wav"); // buffers automatically when created
+    snd_explosion.play();
+
     var fixDef = new b2FixtureDef;
     fixDef.density = 50;
     fixDef.friction = Math.random();
@@ -33,67 +47,72 @@ function explode(x, y)
         body.ApplyImpulse({x:vx*EXPLOSION_SPEED, y:vy*EXPLOSION_SPEED}, {x:x, y:y});
         body.w = 1.0;
         body.h = 1.0;
-        explosionParticles.push(body);
+        this.explosionParticles.push(body);
     }
-    explosions.push(explosionParticles);
-    explosion_decays.push(0);
-    var snd_explosion = new Audio("audio/explosion-02.wav"); // buffers automatically when created
-    snd_explosion.play();
+    this.decay_counter = 0;
 }
 
-
-function DrawExplosion(ctx)
+//////////////////////////////////////////////////////
+Explosion.prototype.DrawExplosion = function(ctx)
 {
     ctx.fillStyle = 'red';
-    for(var e = 0; e < explosions.length; e++)
+    if(this.decay_counter < 100)
     {
-        var explosionParticles = explosions[e];
-        if(explosion_decays[e] < 100)
+        for(var i = 0; i < this.explosionParticles.length; i++)
         {
-            for(var i = 0; i < explosionParticles.length; i++)
-            {
-                var body = explosionParticles[i];
-                var t = body.m_xf;
-                ctx.translate(t.position.x, t.position.y)
-                ctx.beginPath();
-                ctx.arc(0, 0, particle_radius, 0, Math.PI*2, true);
-                ctx.closePath();
-                ctx.fill();
-                ctx.translate(-t.position.x, -t.position.y)
-            }
-            explosion_decays[e]++;
+            var body = this.explosionParticles[i];
+            var t = body.m_xf;
+            ctx.translate(t.position.x, t.position.y)
+            ctx.beginPath();
+            ctx.arc(0, 0, particle_radius, 0, Math.PI*2, true);
+            ctx.closePath();
+            ctx.fill();
+            ctx.translate(-t.position.x, -t.position.y)
         }
+//        this.decay_counter++;
     }
 }
 
-function update_explosions()
+//////////////////////////////////////////////////////
+Explosion.prototype.Update = function()
 {
-    for(var e = 0; e < explosions.length; e++)
+    if(this.decay_counter < 10)
     {
-        var explosionParticles = explosions[e];
-        if(explosion_decays[e] < 10)
-        {
-            explosion_decays[e]++;
-        }
-        else
-        {
-            for(var i = 0; i < explosionParticles.length; i++)
-            {
-                var body = explosionParticles[i];
-                world.DestroyBody(body);
-            }
-         }
+        this.decay_counter++;
     }
-}
-
-$(canvas).click(function (e)
-{
-    var o = $(canvas).offset();
-    var x = (e.pageX-o.left);
-    if(!DEBUG)
-        var y = (canvas.height-e.pageY+o.top);
     else
-        var y = (e.pageY-o.top);
-    explode(x/ppm, y/ppm);
-});
+    {
+        for(var i = 0; i < this.explosionParticles.length; i++)
+        {
+            var body = this.explosionParticles[i];
+            world.DestroyBody(body);
+        }
+     }
+}
+
+
+//////////////////////////////////////////////////////
+function Explosions()
+{
+    this.explosions = [];
+}
+
+//////////////////////////////////////////////////////
+Explosions.prototype.Explode = function(x, y)
+{
+    var explosion = new Explosion();
+    explosion.Explode(x, y);
+    this.explosions.push(explosion);
+}
+
+//////////////////////////////////////////////////////
+Explosions.prototype.Update = function()
+{
+    for(var i = 0; i < this.explosions.length; i++)
+    {
+        var explosion = this.explosions[i];
+        explosion.Update();
+    }
+}
+
 

@@ -2,8 +2,6 @@
 //////////////////////////////////////////////////////
 // Constants
 var EXPLOSION_SPEED = 700/ppm; //500;
-var explosions = [];
-var explosion_decays = [];
 var NUM_PARTICLES = 20;
 
 var b2BodyDef = Box2D.Dynamics.b2BodyDef;
@@ -69,7 +67,6 @@ Explosion.prototype.DrawExplosion = function(ctx)
             ctx.fill();
             ctx.translate(-t.position.x, -t.position.y)
         }
-//        this.decay_counter++;
     }
 }
 

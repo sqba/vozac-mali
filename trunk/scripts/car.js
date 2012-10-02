@@ -1,79 +1,86 @@
 
 //////////////////////////////////////////////////////
-// Variables
+// Constants
 var MAX_STEER_ANGLE = Math.PI/3;
 var STEER_SPEED = 1.5;
 var HORSEPOWERS = 200;
 var CAR_STARTING_POS = new b2Vec2(c_width/2,c_height/2);
 
-var leftRearWheelPosition = new b2Vec2(-1.4,1.90);
-var rightRearWheelPosition = new b2Vec2(1.4,1.9);
-var leftFrontWheelPosition = new b2Vec2(-1.4,-1.9);
-var rightFrontWheelPosition = new b2Vec2(1.4,-1.9);
- 
-var engineSpeed = 0;
-var steeringAngle = 0;
-
-var chassis;
-var leftWheel;
-var rightWheel;
-var leftRearWheel;
-var rightRearWheel;
-var leftJoint;
-var rightJoint;
-
-
-var snd_engine_start = new Audio("audio/engine.wav"); // buffers automatically when created
-var snd_engine_gas = new Audio("audio/burnout.wav"); // buffers automatically when created
-snd_engine_start.play();
-
-
-//////////////////////////////////////////////////////
 var KEY_LEFT    = 37;
 var KEY_UP      = 38;
 var KEY_RIGHT   = 39;
 var KEY_DOWN    = 40;
-$(document).keydown(function onKeyDown(e)
+
+var leftRearWheelPosition = new b2Vec2(-1.4,1.90);
+var rightRearWheelPosition = new b2Vec2(1.4,1.9);
+var leftFrontWheelPosition = new b2Vec2(-1.4,-1.9);
+var rightFrontWheelPosition = new b2Vec2(1.4,-1.9);
+//////////////////////////////////////////////////////
+
+
+function Car()
+{
+    this.chassis;
+    this.leftWheel;
+    this.rightWheel;
+    this.leftRearWheel;
+    this.rightRearWheel;
+    this.leftJoint;
+    this.rightJoint;
+
+    this.engineSpeed = 0;
+    this.steeringAngle = 0;
+
+    this.snd_engine_start = new Audio("audio/engine.wav");
+    this.snd_engine_gas = new Audio("audio/burnout.wav");
+
+    this.createCar();
+
+    this.snd_engine_start.play();
+}
+
+//////////////////////////////////////////////////////
+Car.prototype.onKeyDown = function(e)
 {
     switch(e.which)
     {
         case KEY_LEFT:
-            steeringAngle = -MAX_STEER_ANGLE;
+            this.steeringAngle = -MAX_STEER_ANGLE;
 		    break;
         case KEY_UP:
 		    //chassis.WakeUp();
-            chassis.SetAwake(true);
-		    engineSpeed = -HORSEPOWERS;
+            this.chassis.SetAwake(true);
+		    this.engineSpeed = -HORSEPOWERS;
 		    break;
         case KEY_RIGHT:
-		    steeringAngle = MAX_STEER_ANGLE;
+		    this.steeringAngle = MAX_STEER_ANGLE;
 		    break;
         case KEY_DOWN:
-            snd_engine_gas.play();
-		    engineSpeed = HORSEPOWERS;
+            this.snd_engine_gas.play();
+		    this.engineSpeed = HORSEPOWERS;
 		    break;
     }
-});
- 
-$(document).keyup(function keyReleased_handler(e){
+};
+
+//////////////////////////////////////////////////////
+Car.prototype.onKeyUp = function(e)
+{
     switch(e.which)
     {
         case KEY_LEFT:
         case KEY_RIGHT:
-    		steeringAngle = 0;
+    		this.steeringAngle = 0;
 		    break;
         case KEY_UP:
         case KEY_DOWN:
-    		engineSpeed = 0;
-            snd_engine_gas.pause();
+    		this.engineSpeed = 0;
+            this.snd_engine_gas.pause();
 		    break;
     }
-});
+}
+
 //////////////////////////////////////////////////////
-
-
-
-function createChassis()
+Car.prototype.createChassis = function()
 {
     var bodyDef = new b2BodyDef;
     bodyDef.type = b2Body.b2_dynamicBody;
@@ -82,12 +89,12 @@ function createChassis()
     bodyDef.position = CAR_STARTING_POS.Copy()
 
     var body = myWorld.CreateBody(bodyDef);
-/*
+
     var fixDef = new b2FixtureDef;
     fixDef.density = 1.0;
     fixDef.friction = 0.5;
     fixDef.restitution = 0.2;
-*/
+
     fixDef.shape = new b2PolygonShape();
     fixDef.shape.type = b2Body.b2_dynamicBody;
     fixDef.shape.density = 1;
@@ -98,7 +105,8 @@ function createChassis()
     return body;
 }
 
-function createWheel(car, pos)
+//////////////////////////////////////////////////////
+Car.prototype.createWheel = function(car, pos)
 {
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
@@ -106,12 +114,12 @@ function createWheel(car, pos)
     bodyDef.position.Add(pos);
 
     var body = myWorld.CreateBody(bodyDef);
-/*
+
     var fixDef = new b2FixtureDef;
     fixDef.density = 1.0;
     fixDef.friction = 0.5;
     fixDef.restitution = 0.2;
-*/
+
     fixDef.shape = new b2PolygonShape();
     fixDef.shape.type = b2Body.b2_dynamicBody;
     fixDef.shape.density = 1;
@@ -122,7 +130,8 @@ function createWheel(car, pos)
     return body;
 }
 
-function createRevoluteJoint(car, wheel, motor)
+//////////////////////////////////////////////////////
+Car.prototype.createRevoluteJoint = function(car, wheel, motor)
 {
     var jointDef = new b2RevoluteJointDef();
     jointDef.Initialize(car, wheel, wheel.GetWorldCenter());
@@ -132,7 +141,8 @@ function createRevoluteJoint(car, wheel, motor)
     return joint;
 }
 
-function createPrismaticJoint(car, wheel, motor)
+//////////////////////////////////////////////////////
+Car.prototype.createPrismaticJoint = function(car, wheel, motor)
 {
     var jointDef = new b2PrismaticJointDef();
     jointDef.Initialize(car, wheel, wheel.GetWorldCenter(), new b2Vec2(1,0));
@@ -142,26 +152,27 @@ function createPrismaticJoint(car, wheel, motor)
     return joint;
 }
 
-function createCar()
+//////////////////////////////////////////////////////
+Car.prototype.createCar = function()
 { 
-    chassis = createChassis();
+    this.chassis = this.createChassis();
 
-    leftWheel = createWheel(chassis, leftFrontWheelPosition );
-    leftJoint = createRevoluteJoint(chassis, leftWheel);
+    this.leftWheel = this.createWheel(this.chassis, leftFrontWheelPosition );
+    this.leftJoint = this.createRevoluteJoint(this.chassis, this.leftWheel);
 
-    rightWheel = createWheel(chassis, rightFrontWheelPosition );
-    rightJoint = createRevoluteJoint(chassis, rightWheel);
+    this.rightWheel = this.createWheel(this.chassis, rightFrontWheelPosition );
+    this.rightJoint = this.createRevoluteJoint(this.chassis, this.rightWheel);
 
-    leftRearWheel = createWheel(chassis, leftRearWheelPosition );
-    createPrismaticJoint(chassis, leftRearWheel); // calling createRevoluteJoint cause interesting effect of broken wheels
+    this.leftRearWheel = this.createWheel(this.chassis, leftRearWheelPosition );
+    this.createPrismaticJoint(this.chassis, this.leftRearWheel); // calling createRevoluteJoint cause interesting effect of broken wheels
 
-    rightRearWheel = createWheel(chassis, rightRearWheelPosition );
-    createPrismaticJoint(chassis, rightRearWheel); // calling createRevoluteJoint cause interesting effect of broken wheels
+    this.rightRearWheel = this.createWheel(this.chassis, rightRearWheelPosition );
+    this.createPrismaticJoint(this.chassis, this.rightRearWheel); // calling createRevoluteJoint cause interesting effect of broken wheels
 }
 
-
+//////////////////////////////////////////////////////
 //This function applies a "friction" in a direction orthogonal to the body's axis.
-function killOrthogonalVelocity(targetBody)
+Car.prototype.killOrthogonalVelocity = function(targetBody)
 {
 	var localPoint = new b2Vec2(0,0);
 	var velocity = targetBody.GetLinearVelocityFromLocalPoint(localPoint);
@@ -172,39 +183,37 @@ function killOrthogonalVelocity(targetBody)
 	targetBody.SetLinearVelocity(sidewaysAxis);
 }
 
-function update_car()
+//////////////////////////////////////////////////////
+Car.prototype.Update = function()
 {
 	//killOrthogonalVelocity( chassis );
-	killOrthogonalVelocity( leftWheel );
-	killOrthogonalVelocity( rightWheel );
-	killOrthogonalVelocity( leftRearWheel );
-	killOrthogonalVelocity( rightRearWheel );
+	this.killOrthogonalVelocity( this.leftWheel );
+	this.killOrthogonalVelocity( this.rightWheel );
+	this.killOrthogonalVelocity( this.leftRearWheel );
+	this.killOrthogonalVelocity( this.rightRearWheel );
 
 	//Driving
-	var ldirection = leftWheel.GetTransform().R.col2.Copy();
-	ldirection.Multiply(engineSpeed/ppm);
+	var ldirection = this.leftWheel.GetTransform().R.col2.Copy();
+	ldirection.Multiply(this.engineSpeed/ppm);
 	//leftWheel.ApplyForce(ldirection, leftWheel.GetPosition());
-    leftWheel.SetLinearVelocity(ldirection);
-	var rdirection = rightWheel.GetTransform().R.col2.Copy()
-	rdirection.Multiply(engineSpeed/ppm);
+    this.leftWheel.SetLinearVelocity(ldirection);
+	var rdirection = this.rightWheel.GetTransform().R.col2.Copy()
+	rdirection.Multiply(this.engineSpeed/ppm);
 	//rightWheel.ApplyForce(rdirection, rightWheel.GetPosition());
-    rightWheel.SetLinearVelocity(rdirection);
+    this.rightWheel.SetLinearVelocity(rdirection);
 
 	//Steering
-	var mspeedl = steeringAngle - leftJoint.GetJointAngle();
-	leftJoint.SetMotorSpeed(mspeedl * STEER_SPEED);
-	var mspeedr = steeringAngle - rightJoint.GetJointAngle();
-	rightJoint.SetMotorSpeed(mspeedr * STEER_SPEED);
+	var mspeedl = this.steeringAngle - this.leftJoint.GetJointAngle();
+	this.leftJoint.SetMotorSpeed(mspeedl * STEER_SPEED);
+	var mspeedr = this.steeringAngle - this.rightJoint.GetJointAngle();
+	this.rightJoint.SetMotorSpeed(mspeedr * STEER_SPEED);
 
-    if(engineSpeed != 0)
-        snd_engine_gas.play();
+    if(this.engineSpeed != 0)
+        this.snd_engine_gas.play();
 
 //    console.log("mspeedl: "+mspeedl);
 //    console.log("mspeedr: "+mspeedr);
 //    console.log("steeringAngle: "+steeringAngle);
 //    console.log("engineSpeed: "+engineSpeed);
 }
-
-createCar();
-
 

@@ -3,12 +3,7 @@
 // Constants
 var EXPLOSION_SPEED = 700/ppm; //500;
 var NUM_PARTICLES = 20;
-
-var b2BodyDef = Box2D.Dynamics.b2BodyDef;
-var b2Body = Box2D.Dynamics.b2Body;
-var b2FixtureDef = Box2D.Dynamics.b2FixtureDef;
-
-var particle_radius = 0.1;//0.1;
+var PARTICLE_RADIUS = 0.1;
 //////////////////////////////////////////////////////
 
 
@@ -40,7 +35,7 @@ Explosion.prototype.Explode = function(x, y)
         bodyDef.position.Set(x+vx, y+vy);
         bodyDef.isBullet = true;
         var body = myWorld.CreateBody(bodyDef);
-        fixDef.shape = new b2CircleShape(particle_radius);
+        fixDef.shape = new b2CircleShape(PARTICLE_RADIUS);
         body.CreateFixture(fixDef);
         body.ApplyImpulse({x:vx*EXPLOSION_SPEED, y:vy*EXPLOSION_SPEED}, {x:x, y:y});
         body.w = 1.0;
@@ -51,7 +46,7 @@ Explosion.prototype.Explode = function(x, y)
 }
 
 //////////////////////////////////////////////////////
-Explosion.prototype.DrawExplosion = function(ctx)
+Explosion.prototype.Draw = function(ctx)
 {
     ctx.fillStyle = 'red';
     if(this.decay_counter < 100)
@@ -62,7 +57,7 @@ Explosion.prototype.DrawExplosion = function(ctx)
             var t = body.m_xf;
             ctx.translate(t.position.x, t.position.y)
             ctx.beginPath();
-            ctx.arc(0, 0, particle_radius, 0, Math.PI*2, true);
+            ctx.arc(0, 0, PARTICLE_RADIUS, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.fill();
             ctx.translate(-t.position.x, -t.position.y)
@@ -83,6 +78,7 @@ Explosion.prototype.Update = function()
         {
             var body = this.explosionParticles[i];
             world.DestroyBody(body);
+            this.explosionParticles.splice(this.explosionParticles.indexOf(body), 1);
         }
      }
 }
@@ -109,6 +105,16 @@ Explosions.prototype.Update = function()
     {
         var explosion = this.explosions[i];
         explosion.Update();
+    }
+}
+
+//////////////////////////////////////////////////////
+Explosions.prototype.Draw = function(ctx)
+{
+    for(var i = 0; i < this.explosions.length; i++)
+    {
+        var explosion = this.explosions[i];
+        explosion.Draw(ctx);
     }
 }
 

@@ -34,9 +34,14 @@ if(DEBUG)
 //////////////////////////////////////////////////////
 
 
+//////////////////////////////////////////////////////
 var myCar = new Car();
 var myExplosions = new Explosions();
+//////////////////////////////////////////////////////
 
+
+
+//////////////////////////////////////////////////////
 $(document).keydown(function onKeyDown(e)
 {
     myCar.onKeyDown(e);
@@ -56,32 +61,65 @@ $(canvas).click(function (e)
         var y = (e.pageY-o.top);
     myExplosions.Explode(x/ppm, y/ppm);
 });
+//////////////////////////////////////////////////////
 
 
-function update()
+
+//////////////////////////////////////////////////////
+window.setInterval(function update()
 {
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, c_width, c_height);
-
     //world.Step(1 / 30, 10, 10);
     myWorld.Step(1/30, 8);
 
     myCar.Update();
     myExplosions.Update();
 
-    world.DrawDebugData();
-
 //    world.ClearForces();
 
     if(!DEBUG)
     {
-        DrawExplosion(ctx);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, c_width, c_height);
+
+        myExplosions.Draw(ctx);
         //DrawCar(ctx);
     }
-};
+    else
+    {
+        world.DrawDebugData();
+    }
+} , 1000 / 60);
+//////////////////////////////////////////////////////
 
 
-window.setInterval(update, 1000 / 60);
+
+function createFrame()
+{
+    var line_width = 2/ppm;
+
+    //create ground
+    bodyDef.type = b2Body.b2_staticBody;
+    fixDef.shape = new b2PolygonShape;
+    fixDef.shape.SetAsBox(c_width, line_width);
+
+    // bottom
+    bodyDef.position.Set(0, c_height - line_width);
+    myWorld.CreateBody(bodyDef).CreateFixture(fixDef);
+
+    // top
+    bodyDef.position.Set(0, line_width);
+    myWorld.CreateBody(bodyDef).CreateFixture(fixDef);
+
+    fixDef.shape.SetAsBox(line_width, c_height);
+
+    // left
+    bodyDef.position.Set(0, 0);
+    myWorld.CreateBody(bodyDef).CreateFixture(fixDef);
+
+    // right
+    bodyDef.position.Set(c_width - line_width, 0);
+    myWorld.CreateBody(bodyDef).CreateFixture(fixDef);
+}
 
 
 createFrame();

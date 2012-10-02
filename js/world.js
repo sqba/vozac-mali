@@ -19,7 +19,7 @@ var DEBUG=1;
 // Canvas
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-var ppm = 10;
+var ppm = 20;
 var c_width = canvas.width/ppm;
 var c_height = canvas.height/ppm;
 if(!DEBUG)

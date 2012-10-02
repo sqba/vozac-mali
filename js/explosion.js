@@ -1,6 +1,7 @@
-var EXPLOSION_SPEED = 500; //500;
+var EXPLOSION_SPEED = 700/ppm; //500;
 var explosions = [];
 var explosion_decays = [];
+var NUM_PARTICLES = 20;
 
 var b2BodyDef = Box2D.Dynamics.b2BodyDef;
 var b2Body = Box2D.Dynamics.b2Body;
@@ -14,14 +15,14 @@ function explode(x, y)
     var explosionParticles = [];
     var fixDef = new b2FixtureDef;
     fixDef.density = 50;
-    fixDef.friction = 0.0;
-    fixDef.restitution = 0.0;
+    fixDef.friction = Math.random();
+    fixDef.restitution = Math.random();
 
-    for(var i = 0; i < 40; i++)
+    for(var i = 0; i < NUM_PARTICLES; i++)
     {
-        var a = Math.PI/5*i;
-        var vx = Math.cos(a);
-        var vy = Math.sin(a);
+        var a = Math.PI/(NUM_PARTICLES/2)*i;
+        var vx = Math.cos(a);// + Math.random();
+        var vy = Math.sin(a);// + Math.random();
         //var bodyDef = new b2BodyDef();
         bodyDef.type = b2Body.b2_dynamicBody;
         bodyDef.position.Set(x+vx, y+vy);

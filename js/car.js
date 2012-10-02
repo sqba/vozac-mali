@@ -6,10 +6,10 @@ var STEER_SPEED = 1.5;
 var HORSEPOWERS = 200;
 var CAR_STARTING_POS = new b2Vec2(c_width/2,c_height/2);
 
-var leftRearWheelPosition = new b2Vec2(-1.2,1.90);
-var rightRearWheelPosition = new b2Vec2(1.2,1.9);
-var leftFrontWheelPosition = new b2Vec2(-1.2,-1.9);
-var rightFrontWheelPosition = new b2Vec2(1.2,-1.9);
+var leftRearWheelPosition = new b2Vec2(-1.4,1.90);
+var rightRearWheelPosition = new b2Vec2(1.4,1.9);
+var leftFrontWheelPosition = new b2Vec2(-1.4,-1.9);
+var rightFrontWheelPosition = new b2Vec2(1.4,-1.9);
  
 var engineSpeed = 0;
 var steeringAngle = 0;

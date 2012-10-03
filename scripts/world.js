@@ -44,7 +44,12 @@ var myExplosions = new Explosions();
 //////////////////////////////////////////////////////
 $(document).keydown(function onKeyDown(e)
 {
-    myCar.onKeyDown(e);
+    if(32 == e.which)
+    {
+        StartPause();
+    }
+    else
+        myCar.onKeyDown(e);
 });
 
 $(document).keyup(function onKeyUp(e){
@@ -64,9 +69,21 @@ $(canvas).click(function (e)
 //////////////////////////////////////////////////////
 
 
-
+var runIntervalId = null;
+StartPause();
 //////////////////////////////////////////////////////
-window.setInterval(update, 1000 / 60);
+function StartPause()
+{
+    if( runIntervalId )
+    {
+        clearInterval(runIntervalId);
+        runIntervalId = null;
+    }
+    else
+    {
+        runIntervalId = window.setInterval(update, 1000 / 60);
+    }
+}
 function update()
 {
     //world.Step(1 / 30, 10, 10);

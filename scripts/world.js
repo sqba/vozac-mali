@@ -66,7 +66,8 @@ $(canvas).click(function (e)
 
 
 //////////////////////////////////////////////////////
-window.setInterval(function update()
+window.setInterval(update, 1000 / 60);
+function update()
 {
     //world.Step(1 / 30, 10, 10);
     myWorld.Step(1/30, 8);
@@ -88,7 +89,7 @@ window.setInterval(function update()
     {
         world.DrawDebugData();
     }
-} , 1000 / 60);
+}
 //////////////////////////////////////////////////////
 
 

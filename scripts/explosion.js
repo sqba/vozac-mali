@@ -18,6 +18,7 @@ function Explosion()
 Explosion.prototype.Explode = function(x, y)
 {
     var snd_explosion = new Audio("audio/explosion-02.wav"); // buffers automatically when created
+    snd_explosion.volume = 0.1;
     snd_explosion.play();
 
     var fixDef = new b2FixtureDef;

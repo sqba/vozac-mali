@@ -35,7 +35,7 @@ function createBall(world, x, y, r)
 	return world.CreateBody(ballBd);
 }
 */
-function createBox(world, x, y, width, height, fixed)
+function createBox(world, x, y, width, height, fixed, userData)
 {
 //    console.log("createBox("+x+", "+y+", "+width+", "+height+")");
 
@@ -44,6 +44,8 @@ function createBox(world, x, y, width, height, fixed)
     fixDef.shape.SetAsBox(width/2, height/2);
     bodyDef.position.x = x;
     bodyDef.position.y = y;
-    world.CreateBody(bodyDef).CreateFixture(fixDef);
+    var body = world.CreateBody(bodyDef);
+    body.SetUserData(userData);
+    body.CreateFixture(fixDef);
 }
 

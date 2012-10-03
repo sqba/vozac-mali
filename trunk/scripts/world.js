@@ -143,12 +143,12 @@ function createFrame()
 createFrame();
 
 // Obstacles - test
-createBox(myWorld, 8, 8, 2, 2, false);
-createBox(myWorld, c_width-8-2, 8, 2, 2, false);
-createBox(myWorld, 8, c_height-8, 2, 2, false);
-createBox(myWorld, c_width-8-2, c_height-8, 2, 2, false);
+createBox(myWorld, 8, 8, 2, 2, false, 'static');
+createBox(myWorld, c_width-8-2, 8, 2, 2, false, 'static');
+createBox(myWorld, 8, c_height-8, 2, 2, false, 'static');
+createBox(myWorld, c_width-8-2, c_height-8, 2, 2, false, 'static');
 
 
-
+serializeWorld();
 
 

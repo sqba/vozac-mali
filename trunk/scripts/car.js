@@ -32,7 +32,9 @@ function Car()
     this.steeringAngle = 0;
 
     this.snd_engine_start = new Audio("audio/engine.wav");
+    this.snd_engine_start.volume = 0.1;
     this.snd_engine_gas = new Audio("audio/burnout.wav");
+    this.snd_engine_gas.volume = 0.1;
 
     this.createCar();
 

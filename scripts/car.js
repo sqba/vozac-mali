@@ -104,6 +104,8 @@ Car.prototype.createChassis = function()
     body.CreateFixture(fixDef);
 //    body.SetMassFromShapes();
 
+    body.SetUserData('chassis');
+
     return body;
 }
 
@@ -128,6 +130,8 @@ Car.prototype.createWheel = function(car, pos)
     fixDef.shape.SetAsBox(0.2,0.5);
     body.CreateFixture(fixDef);
 //    body.SetMassFromShapes();
+
+    body.SetUserData('wheel');
 
     return body;
 }

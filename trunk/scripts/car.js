@@ -63,12 +63,19 @@ Car.prototype.onKeyDown = function(e)
 		    this.engineSpeed = HORSEPOWERS;
 		    break;
             break;
+        case SPACE_BAR:
+            {
+                var pos = this.chassis.GetTransform().position;
+                console.log(pos);
+                myBombs.AddAt(pos.x, pos.y /*,1000*/);
+            }
     }
 };
 
 //////////////////////////////////////////////////////
 Car.prototype.onKeyUp = function(e)
 {
+    console.log(e.which);
     switch(e.which)
     {
         case KEY_LEFT:
@@ -80,12 +87,6 @@ Car.prototype.onKeyUp = function(e)
     		this.engineSpeed = 0;
             this.snd_engine_gas.pause();
 		    break;
-        case SPACE_BAR:
-            {
-                var pos = this.chassis.GetTransform().position;
-                console.log(pos);
-                myBombs.AddAt(pos.x, pos.y /*,1000*/);
-            }
     }
 }
 

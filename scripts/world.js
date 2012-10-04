@@ -45,11 +45,11 @@ var myBombs = new Bombs;
 //////////////////////////////////////////////////////
 $(document).keydown(function onKeyDown(e)
 {
-    if(32 == e.which)
+    /*if(32 == e.which)
     {
         StartPause();
     }
-    else
+    else*/
         myCar.onKeyDown(e);
 });
 
@@ -66,7 +66,7 @@ $(canvas).click(function (e)
     else
         var y = (e.pageY-o.top);
     //myExplosions.AddAt(x/ppm, y/ppm);
-    myBombs.AddAt(x/ppm, y/ppm /*,1000*/);
+    //myBombs.AddAt(x/ppm, y/ppm /*,1000*/);
 });
 //////////////////////////////////////////////////////
 

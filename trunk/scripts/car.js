@@ -10,6 +10,7 @@ var KEY_LEFT    = 37;
 var KEY_UP      = 38;
 var KEY_RIGHT   = 39;
 var KEY_DOWN    = 40;
+var SPACE_BAR   = 32;
 
 var leftRearWheelPosition = new b2Vec2(-1.4,1.90);
 var rightRearWheelPosition = new b2Vec2(1.4,1.9);
@@ -61,6 +62,13 @@ Car.prototype.onKeyDown = function(e)
             this.snd_engine_gas.play();
 		    this.engineSpeed = HORSEPOWERS;
 		    break;
+        case SPACE_BAR:
+            {
+                var pos = this.chassis.GetTransform().position;
+                console.log(pos);
+                myBombs.AddAt(pos.x, pos.y /*,1000*/);
+            }
+            break;
     }
 };
 

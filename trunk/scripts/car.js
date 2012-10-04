@@ -62,12 +62,6 @@ Car.prototype.onKeyDown = function(e)
             this.snd_engine_gas.play();
 		    this.engineSpeed = HORSEPOWERS;
 		    break;
-        case SPACE_BAR:
-            {
-                var pos = this.chassis.GetTransform().position;
-                console.log(pos);
-                myBombs.AddAt(pos.x, pos.y /*,1000*/);
-            }
             break;
     }
 };
@@ -86,6 +80,12 @@ Car.prototype.onKeyUp = function(e)
     		this.engineSpeed = 0;
             this.snd_engine_gas.pause();
 		    break;
+        case SPACE_BAR:
+            {
+                var pos = this.chassis.GetTransform().position;
+                console.log(pos);
+                myBombs.AddAt(pos.x, pos.y /*,1000*/);
+            }
     }
 }
 

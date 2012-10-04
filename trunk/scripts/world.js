@@ -66,7 +66,7 @@ $(canvas).click(function (e)
     else
         var y = (e.pageY-o.top);
     //myExplosions.AddAt(x/ppm, y/ppm);
-    myBombs.AddAt(x/ppm, y/ppm);
+    myBombs.AddAt(x/ppm, y/ppm /*,1000*/);
 });
 //////////////////////////////////////////////////////
 

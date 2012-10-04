@@ -7,11 +7,14 @@ var TIMER_INTERVAL = 3 * 1000;
 
 
 //////////////////////////////////////////////////////
-function Bomb(x, y)
+function Bomb(x, y, interval)
 {
     this.body = this.create(x, y);
 
-    this.runIntervalId = setTimeout(this.explode, TIMER_INTERVAL, this);
+    if(null == interval)
+        interval = TIMER_INTERVAL;
+
+    this.runIntervalId = setTimeout(this.explode, interval, this);
 
     this.body.SetUserData(this.runIntervalId);
 //    console.log(this.body.GetUserData());
@@ -60,9 +63,9 @@ function Bombs()
 }
 
 //////////////////////////////////////////////////////
-Bombs.prototype.AddAt = function(x, y)
+Bombs.prototype.AddAt = function(x, y, interval)
 {
-    var bomb = new Bomb(x, y);
+    var bomb = new Bomb(x, y, interval);
     this.bombs.push(bomb);
 }
 

@@ -8,14 +8,15 @@ var PARTICLE_RADIUS = 0.1;
 
 
 //////////////////////////////////////////////////////
-function Explosion()
+function Explosion(x, y)
 {
     this.explosionParticles = [];
     this.decay_counter = 0;
+    this.explode(x, y);
 }
 
 //////////////////////////////////////////////////////
-Explosion.prototype.Explode = function(x, y)
+Explosion.prototype.explode = function(x, y)
 {
     var snd_explosion = new Audio("audio/explosion-02.wav"); // buffers automatically when created
     snd_explosion.volume = 0.1;
@@ -92,10 +93,9 @@ function Explosions()
 }
 
 //////////////////////////////////////////////////////
-Explosions.prototype.Explode = function(x, y)
+Explosions.prototype.AddAt = function(x, y)
 {
-    var explosion = new Explosion();
-    explosion.Explode(x, y);
+    var explosion = new Explosion(x, y);
     this.explosions.push(explosion);
 }
 

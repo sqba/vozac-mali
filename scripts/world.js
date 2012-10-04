@@ -37,6 +37,7 @@ if(DEBUG)
 //////////////////////////////////////////////////////
 var myCar = new Car();
 var myExplosions = new Explosions();
+var myBombs = new Bombs;
 //////////////////////////////////////////////////////
 
 
@@ -64,7 +65,8 @@ $(canvas).click(function (e)
         var y = (canvas.height-e.pageY+o.top);
     else
         var y = (e.pageY-o.top);
-    myExplosions.Explode(x/ppm, y/ppm);
+    //myExplosions.AddAt(x/ppm, y/ppm);
+    myBombs.AddAt(x/ppm, y/ppm);
 });
 //////////////////////////////////////////////////////
 
@@ -91,6 +93,7 @@ function update()
 
     myCar.Update();
     myExplosions.Update();
+//    myBombs.Update();
 
 //    world.ClearForces();
 

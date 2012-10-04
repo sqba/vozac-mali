@@ -1,7 +1,7 @@
 
 //////////////////////////////////////////////////////
 // Constants
-var BOMB_RADIUS = 1;
+var BOMB_RADIUS = 0.5;
 var TIMER_INTERVAL = 3 * 1000;
 //////////////////////////////////////////////////////
 
@@ -9,12 +9,23 @@ var TIMER_INTERVAL = 3 * 1000;
 //////////////////////////////////////////////////////
 function Bomb(x, y)
 {
-    this.x = x;
-    this.y = y;
-    this.body = null;
-    this.create(x, y);
-    setTimeout(this.explode, TIMER_INTERVAL);
+    this.body = this.create(x, y);
 
+    this.runIntervalId = setTimeout(this.explode, TIMER_INTERVAL, this);
+
+    this.body.SetUserData(this.runIntervalId);
+//    console.log(this.body.GetUserData());
+}
+
+Bomb.prototype.explode = function(obj)
+{
+//    console.log(obj);
+    var body = obj.body;
+//    console.log(body.GetUserData());
+    var xf = body.GetTransform();
+    myWorld.DestroyBody(body);
+    myExplosions.AddAt(xf.position.x, xf.position.y);
+   // clearTimeout(this.runIntervalId);
 }
 
 Bomb.prototype.create = function(x, y)
@@ -34,18 +45,12 @@ Bomb.prototype.create = function(x, y)
     fixDef.shape = new b2CircleShape(BOMB_RADIUS);
     fixDef.shape.type = b2Body.b2_dynamicBody;
     fixDef.shape.density = 1;
-    //fixDef.shape.SetAsBox(1,1);
     body.CreateFixture(fixDef);
+
+    return body;
 }
 
 //////////////////////////////////////////////////////
-Bomb.prototype.explode = function()
-{
-    var xf = this.body.m_xf;
-    world.DestroyBody(this.body);
-    console.log(xf);
-    myExplosions.AddAt(xf.position.x, xf.position.y);
-}
 
 
 //////////////////////////////////////////////////////

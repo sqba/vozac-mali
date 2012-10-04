@@ -6,29 +6,60 @@ var TIMER_INTERVAL = 3 * 1000;
 //////////////////////////////////////////////////////
 
 
+    var listener = new Box2D.Dynamics.b2ContactListener;
+    //listener.PostSolve = this.contact;
+
+    listener.BeginContact = function(contact) {
+        console.log(contact.GetFixtureA().GetBody().GetUserData());
+    }
+
+    listener.EndContact = function(contact) {
+        console.log(contact.GetFixtureA().GetBody().GetUserData());
+    }
+
+    
 //////////////////////////////////////////////////////
 function Bomb(x, y, interval)
 {
     this.body = this.create(x, y);
 
-    if(null == interval)
-        interval = TIMER_INTERVAL;
+    if(TIMER_INTERVAL > 0)
+    {
+        if(null == interval)
+            interval = TIMER_INTERVAL;
 
-    this.runIntervalId = setTimeout(this.explode, interval, this);
+        this.runIntervalId = setTimeout(this.onTimeout, interval, this);
+    }
 
-    this.body.SetUserData(this.runIntervalId);
+//    this.body.SetUserData(this.runIntervalId);
 //    console.log(this.body.GetUserData());
+
+//    this.body.SetUserData(this);
 }
 
-Bomb.prototype.explode = function(obj)
+Bomb.prototype.contact = function(contact, impulse)
+{
+    if(contact)
+    {
+        console.log(contact);
+        this.explode();
+    }
+}
+
+Bomb.prototype.onTimeout = function(obj)
 {
 //    console.log(obj);
     var body = obj.body;
 //    console.log(body.GetUserData());
-    var xf = body.GetTransform();
+    var pos = body.GetTransform().position;
     myWorld.DestroyBody(body);
-    myExplosions.AddAt(xf.position.x, xf.position.y);
+    myExplosions.AddAt(pos.x, pos.y);
    // clearTimeout(this.runIntervalId);
+}
+
+Bomb.prototype.explode = function()
+{
+    this.runIntervalId = setTimeout(this.onTimeout, 1, this);
 }
 
 Bomb.prototype.create = function(x, y)
@@ -39,6 +70,7 @@ Bomb.prototype.create = function(x, y)
     //bodyDef.position.Add(pos);
 
     body = myWorld.CreateBody(bodyDef);
+    body.SetUserData(this);
 
     var fixDef = new b2FixtureDef;
     fixDef.density = 1.0;

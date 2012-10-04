@@ -66,7 +66,7 @@ Car.prototype.onKeyDown = function(e)
         case SPACE_BAR:
             {
                 var pos = this.chassis.GetTransform().position;
-                console.log(pos);
+//                console.log(pos);
                 myBombs.AddAt(pos.x, pos.y /*,1000*/);
             }
     }
@@ -75,7 +75,7 @@ Car.prototype.onKeyDown = function(e)
 //////////////////////////////////////////////////////
 Car.prototype.onKeyUp = function(e)
 {
-    console.log(e.which);
+//    console.log(e.which);
     switch(e.which)
     {
         case KEY_LEFT:

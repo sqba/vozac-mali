@@ -45,11 +45,12 @@ var myBombs = new Bombs;
 //////////////////////////////////////////////////////
 $(document).keydown(function onKeyDown(e)
 {
-    /*if(32 == e.which)
+//    console.log(e.which);
+    if(80 == e.which)// P
     {
         StartPause();
     }
-    else*/
+    else
         myCar.onKeyDown(e);
 });
 

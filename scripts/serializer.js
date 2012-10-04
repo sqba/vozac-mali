@@ -13,7 +13,7 @@ function serializeWorld(world, context) {
 //            console.log(b.GetUserData()+"(x: "+b.m_xf.position.x+", y: "+b.m_xf.position.y+")");
 //            if("wheel" == b.GetUserData() || "chassis" == b.GetUserData())
 //            {
-//                var xf = b.m_xf;
+//                var xf = b.GetTransform();
 //                xf.position.x += 10;
 //                b.SetTransform(xf);
 //            }

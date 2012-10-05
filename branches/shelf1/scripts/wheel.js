@@ -59,14 +59,9 @@ Wheel.prototype.updateFriction = function()
 {
 	var impulse = this.body.GetMass() * -this.getLateralVelocity();
 	this.body.ApplyImpulse( impulse, this.body.GetWorldCenter() );
+//	this.body.ApplyAngularImpulse( 0.1 * this.body.GetInertia() * -this.body.GetAngularVelocity() );
 }
 /*
-Wheel.prototype.getLateralVelocity = function()
-{
-	var currentRightNormal = this.body.GetWorldVector( new b2Vec2(1,0) );
-	var lateralVelocity = b2Math.Dot( currentRightNormal, this.body.GetLinearVelocity() ) * currentRightNormal;
-	return lateralVelocity;
-}
 Wheel.prototype.getForwardVelocity = function()
 {
 	var currentForwardNormal = this.body.GetWorldVector( new b2Vec2(0,1) );
@@ -77,6 +72,7 @@ Wheel.prototype.getForwardVelocity = function()
 //////////////////////////////////////////////////////
 Wheel.prototype.Update = function(engineSpeed, steeringAngle)
 {
+//	this.updateFriction();
 	this.killOrthogonalVelocity();
 
 	if( this.power )
@@ -103,9 +99,9 @@ Wheel.prototype.createRevoluteJoint = function(chassis, motor)
 {
 	var jointDef = new b2RevoluteJointDef();
 	jointDef.Initialize(chassis, this.body, this.body.GetWorldCenter());
-//	jointDef.enableLimit = true;
-//	jointDef.lowerAngle = degrees_to_radians(-45);
-//	jointDef.upperAngle =  degrees_to_radians(45);
+	jointDef.enableLimit = true;
+	jointDef.lowerAngle = -MAX_STEER_ANGLE;
+	jointDef.upperAngle =  MAX_STEER_ANGLE;
 
 	jointDef.enableMotor = true;
 	jointDef.maxMotorTorque = 100;

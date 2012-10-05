@@ -14,8 +14,8 @@ function Wheel(pos, chassis, steer, power)
 
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 1 / SCALE;
-	fixDef.friction = 0.9;
-	fixDef.restitution = 0.1;
+//	fixDef.friction = 0.9;
+//	fixDef.restitution = 0.1;
 	fixDef.shape = new b2PolygonShape();
 	fixDef.shape.type = b2Body.b2_dynamicBody;
 	fixDef.shape.SetAsBox(0.2*SCALE,0.5*SCALE);
@@ -47,13 +47,17 @@ Wheel.prototype.killOrthogonalVelocity = function()
 	this.body.SetLinearVelocity(sidewaysAxis);
 }
 
-Wheel.prototype.killLateralVelocity = function()
+Wheel.prototype.getLateralVelocity = function()
 {
 	// Killing lateral velocity
 	var currentRightNormal = this.body.GetWorldVector( new b2Vec2(1,0) );
 	var lateralVelocity = currentRightNormal.Multiply(b2Math.Dot( currentRightNormal, this.body.GetLinearVelocity() ));
+	return lateralVelocity;
+}
 
-	var impulse = this.body.GetMass() * -lateralVelocity;
+Wheel.prototype.updateFriction = function()
+{
+	var impulse = this.body.GetMass() * -this.getLateralVelocity();
 	this.body.ApplyImpulse( impulse, this.body.GetWorldCenter() );
 }
 /*

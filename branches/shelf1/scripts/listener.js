@@ -1,8 +1,8 @@
+/*
 var listener = new Box2D.Dynamics.b2ContactListener;
 
 listener.BeginContact = function(contact)
 {
-/*
     var bodyA = contact.GetFixtureA().GetBody();
     var bodyB = contact.GetFixtureB().GetBody();
     var dataA = bodyA.GetUserData();
@@ -17,15 +17,23 @@ listener.BeginContact = function(contact)
     {
         dataB.explode();
     }
-*/
 }
-listener.EndContact = function(contact) {
+
+listener.EndContact = function(contact)
+{
     //console.log(contact.GetFixtureA().GetBody().GetUserData());
 }
-listener.PostSolve = function(contact, impulse) {
+
+listener.PostSolve = function(contact, impulse)
+{
     
 }
-listener.PreSolve = function(contact, oldManifold) {
+
+listener.PreSolve = function(contact, oldManifold)
+{
 
 }
+
 myWorld.SetContactListener(listener);
+*/
+

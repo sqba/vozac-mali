@@ -51,6 +51,17 @@ function Car()
 //////////////////////////////////////////////////////
 Car.prototype.createBody = function()
 {
+/*
+	var vertices = [];
+	vertices.push( new b2Vec2(1.5*SCALE,   0*SCALE) );
+	vertices.push( new b2Vec2(   3*SCALE, 2.5*SCALE));
+	vertices.push( new b2Vec2( 2.8*SCALE, 5.5*SCALE));
+	vertices.push( new b2Vec2(   1*SCALE,  10*SCALE));
+	vertices.push( new b2Vec2(  -1*SCALE,  10*SCALE));
+	vertices.push( new b2Vec2(-2.8*SCALE, 5.5*SCALE));
+	vertices.push( new b2Vec2(  -3*SCALE, 2.5*SCALE));
+	vertices.push( new b2Vec2(-1.5*SCALE,   0*SCALE));
+*/
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	bodyDef.linearDamping = 0.1;
@@ -67,6 +78,7 @@ Car.prototype.createBody = function()
 	fixDef.shape = new b2PolygonShape();
 	fixDef.shape.type = b2Body.b2_dynamicBody;
 	fixDef.shape.SetAsBox(1.5*SCALE,2.5*SCALE);
+//	fixDef.shape.SetAsArray( vertices, 8 );
 	body.CreateFixture(fixDef);
 
 	body.SetUserData('car');

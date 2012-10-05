@@ -12,10 +12,26 @@ var KEY_DOWN    = 40;
 var SPACE_BAR   = 32;
 
 var CAR_STARTING_POS = new b2Vec2(c_width/2,c_height/2);
-var LEFT_FRONT_WHEEL_POSITION = new b2Vec2(-1.4*SCALE,-1.9*SCALE);
-var RIGHT_FRONT_WHEEL_POSITION = new b2Vec2(1.4*SCALE,-1.9*SCALE);
-var LEFT_REAR_WHEEL_POSITION = new b2Vec2(-1.4*SCALE,1.90*SCALE);
-var RIGHT_REAR_WHEEL_POSITION = new b2Vec2(1.4*SCALE,1.9*SCALE);
+
+var CHASSIS_POLY = false;
+var LEFT_FRONT_WHEEL_POSITION;
+var RIGHT_FRONT_WHEEL_POSITION;
+var LEFT_REAR_WHEEL_POSITION;
+var RIGHT_REAR_WHEEL_POSITION;
+if( CHASSIS_POLY )
+{
+	LEFT_FRONT_WHEEL_POSITION = new b2Vec2(-3*SCALE, 8.5*SCALE);
+	RIGHT_FRONT_WHEEL_POSITION = new b2Vec2(3*SCALE, 8.5*SCALE);
+	LEFT_REAR_WHEEL_POSITION = new b2Vec2(-3*SCALE, 0.75*SCALE);
+	RIGHT_REAR_WHEEL_POSITION = new b2Vec2(3*SCALE, 0.75*SCALE);
+}
+else
+{
+	LEFT_FRONT_WHEEL_POSITION = new b2Vec2(-1.4*SCALE,-1.9*SCALE);
+	RIGHT_FRONT_WHEEL_POSITION = new b2Vec2(1.4*SCALE,-1.9*SCALE);
+	LEFT_REAR_WHEEL_POSITION = new b2Vec2(-1.4*SCALE,1.90*SCALE);
+	RIGHT_REAR_WHEEL_POSITION = new b2Vec2(1.4*SCALE,1.9*SCALE);
+}
 //////////////////////////////////////////////////////
 
 
@@ -51,17 +67,19 @@ function Car()
 //////////////////////////////////////////////////////
 Car.prototype.createBody = function()
 {
-/*
 	var vertices = [];
-	vertices.push( new b2Vec2(1.5*SCALE,   0*SCALE) );
-	vertices.push( new b2Vec2(   3*SCALE, 2.5*SCALE));
-	vertices.push( new b2Vec2( 2.8*SCALE, 5.5*SCALE));
-	vertices.push( new b2Vec2(   1*SCALE,  10*SCALE));
-	vertices.push( new b2Vec2(  -1*SCALE,  10*SCALE));
-	vertices.push( new b2Vec2(-2.8*SCALE, 5.5*SCALE));
-	vertices.push( new b2Vec2(  -3*SCALE, 2.5*SCALE));
-	vertices.push( new b2Vec2(-1.5*SCALE,   0*SCALE));
-*/
+	if( CHASSIS_POLY )
+	{
+		vertices.push( new b2Vec2(1.5*SCALE,   0*SCALE) );
+		vertices.push( new b2Vec2(   3*SCALE, 2.5*SCALE));
+		vertices.push( new b2Vec2( 2.8*SCALE, 5.5*SCALE));
+		vertices.push( new b2Vec2(   1*SCALE,  10*SCALE));
+		vertices.push( new b2Vec2(  -1*SCALE,  10*SCALE));
+		vertices.push( new b2Vec2(-2.8*SCALE, 5.5*SCALE));
+		vertices.push( new b2Vec2(  -3*SCALE, 2.5*SCALE));
+		vertices.push( new b2Vec2(-1.5*SCALE,   0*SCALE));
+	}
+
 	var bodyDef = new b2BodyDef;
 	bodyDef.type = b2Body.b2_dynamicBody;
 	bodyDef.linearDamping = 0.1;
@@ -72,13 +90,15 @@ Car.prototype.createBody = function()
 
 	var fixDef = new b2FixtureDef;
 	fixDef.density = 1 / SCALE;
-	fixDef.friction = 1.1;
-	fixDef.restitution = 0.1;
+//	fixDef.friction = 1.1;
+//	fixDef.restitution = 0.1;
 
 	fixDef.shape = new b2PolygonShape();
 	fixDef.shape.type = b2Body.b2_dynamicBody;
-	fixDef.shape.SetAsBox(1.5*SCALE,2.5*SCALE);
-//	fixDef.shape.SetAsArray( vertices, 8 );
+	if( CHASSIS_POLY )
+		fixDef.shape.SetAsArray( vertices, 8 );
+	else
+		fixDef.shape.SetAsBox(1.5*SCALE,2.5*SCALE);
 	body.CreateFixture(fixDef);
 
 	body.SetUserData('car');
